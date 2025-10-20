@@ -54,6 +54,13 @@
                 background-color: #f9f9f9;
                 text-align: center;
             }
+            .hidden-length-warning {
+                visibility: hidden;
+                color: red;
+            }
+            .length-warning {
+                color: red;
+            }
         </style>
     </head>
     <body>
@@ -65,8 +72,9 @@
             <div class="password-display">
                 <input type="text" id="password" readonly />
             </div>
+            <label for="lengthWarning" class="hidden-length-warning" id="warning" />
         </div>
-                <script>
+        <script>
             function pass(length = 12) {
             const char = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%()_-+=";
             let password = "";
@@ -75,20 +83,34 @@
                 password += char[ind];
             }
             return password;
-        }
-        const btn = document.getElementById("generateButton");
-        const inp = document.getElementById("password");
-        const passLen = document.getElementById("passwordLength");
-        btn.addEventListener("click", () => {
-            let length = parseInt(passLen.value, 10);
-            if (length < 8)
-                length = 8;
-            if (length > 20)
-                length = 20;
-            const password = pass(length);
-            inp.value = password;
-        });
-        //# sourceMappingURL=pass.js.map
+            }
+            const btn = document.getElementById("generateButton");
+            const inp = document.getElementById("password");
+            const passLen = document.getElementById("passwordLength");
+            const lenWarning = document.getElementById("warning");
+            btn.addEventListener("click", () => {
+                if (lenWarning.classList.contains("length-warning")) {
+                    lenWarning.innerHTML = "";
+                    lenWarning.classList.remove("length-warning");
+                    lenWarning.classList.add("hidden-length-warning");
+                }
+                let length = parseInt(passLen.value, 10);
+                if (length < 8) {
+                    lenWarning.innerHTML = "The password's length should be greater than 8";
+                    lenWarning.classList.remove("hidden-length-warning");
+                    lenWarning.classList.add("length-warning");
+                    length = 8;
+                }
+                if (length > 20) {
+                    lenWarning.innerHTML = "The password's length should not exceed 20 characters";
+                    lenWarning.classList.remove("hidden-length-warning");
+                    lenWarning.classList.add("length-warning");
+                    length = 20;
+                }
+                const password = pass(length);
+                inp.value = password;
+            });
+            //# sourceMappingURL=pass.js.map
         </script>
     </body>
 </html>

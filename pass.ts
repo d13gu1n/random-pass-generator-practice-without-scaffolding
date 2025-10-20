@@ -11,12 +11,28 @@ function pass(length: number = 12): string {
 const btn = document.getElementById("generateButton") as HTMLButtonElement;
 const inp = document.getElementById("password") as HTMLInputElement;
 const passLen = document.getElementById("passwordLength") as HTMLInputElement;
+const lenWarning = document.getElementById("warning") as HTMLInputElement;
 
 btn.addEventListener("click", () => {
+    if (lenWarning.classList.contains("length-warning")) {
+        lenWarning.innerHTML = "";
+        lenWarning.classList.remove("length-warning");
+        lenWarning.classList.add("hidden-length-warning");
+    }
     let length = parseInt(passLen.value, 10);
 
-    if (length < 8) length = 8;
-    if (length > 20) length = 20;
+    if (length < 8) {
+        lenWarning.innerHTML = "The password's length should be greater than 8";
+        lenWarning.classList.remove("hidden-length-warning");
+        lenWarning.classList.add("length-warning");
+        length = 8;
+    }
+    if (length > 20) {
+        lenWarning.innerHTML = "The password's length should not exceed 20 characters";
+        lenWarning.classList.remove("hidden-length-warning");
+        lenWarning.classList.add("length-warning");
+        length = 20;
+    }
 
     const password = pass(length);
     inp.value = password;
